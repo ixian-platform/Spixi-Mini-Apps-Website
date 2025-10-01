@@ -1,0 +1,13 @@
+caVersion = 0
+id = com.ixilabs.spixi.video-test
+publisher = IXI Labs
+name = Spixi Video Test
+version = 0.1.0
+capabilities = singleUser
+image = https://apps.spixi.io/apps/spixi-video-test.png
+minUsers = 
+maxUsers = 
+protocols = 
+contentUrl = https://apps.spixi.io/apps/spixi-video-test.zip
+checksum = faf65710f07f5d20be79398c5b80492af253a04b9bfa22fd3bc7bd845e6a2da5
+contentSize = 7560

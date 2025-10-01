@@ -1,0 +1,13 @@
+caVersion = 0
+id = com.ixilabs.spixi.mini-apps-test
+publisher = IXI Labs
+name = Mini Apps Test
+version = 1.1.0
+capabilities = multiUser
+image = https://apps.spixi.io/apps/mini-apps-test.png
+minUsers = 
+maxUsers = 2
+protocols = com.ixilabs.spixi.mini-apps-test
+contentUrl = https://apps.spixi.io/apps/mini-apps-test.zip
+checksum = 1d32ac7f9a8108a3f4c1068c7750aa4011bb03d254fa6861a45d445635192592
+contentSize = 452326

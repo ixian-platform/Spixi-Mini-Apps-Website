@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Spixi MiniApp Packer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 2em;
+        }
+
+        .dropzone {
+            border: 2px dashed #aaa;
+            border-radius: 10px;
+            padding: 2em;
+            text-align: center;
+            margin-bottom: 1em;
+            color: #555;
+            cursor: pointer;
+        }
+
+        label {
+            display: block;
+            margin-top: 1em;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.5em;
+            margin-top: 0.2em;
+            box-sizing: border-box;
+        }
+
+        input.readonly {
+            background-color: #f0f0f0;
+            color: #555;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 1.5em;
+            padding: 0.75em 1.5em;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Spixi MiniApp Packer v1.0</h1>
+    <div class="dropzone" id="dropzone">Drop your app folder here</div>
+    <div id="warning" style="color: red; font-weight: bold; margin-bottom: 1em;"></div>
+
+    <div id="formContainer" style="display: none;">
+        <form id="spixiForm">
+            <label>caVersion</label>
+            <input type="text" name="caVersion" value="0" readonly class="readonly" />
+
+            <label>App ID</label>
+            <input type="text" name="id" readonly class="readonly" />
+
+            <label>Publisher</label>
+            <input type="text" name="publisher" readonly class="readonly" />
+
+            <label>Name</label>
+            <input type="text" name="name" readonly class="readonly" />
+
+            <label>Version</label>
+            <input type="text" name="version" readonly class="readonly" />
+
+            <label>Capabilities</label>
+            <input type="text" name="capabilities" readonly class="readonly" />
+
+            <label>Min Users</label>
+            <input type="text" name="minUsers" readonly class="readonly" />
+
+            <label>Max Users</label>
+            <input type="text" name="maxUsers" readonly class="readonly" />
+
+            <label>Protocols</label>
+            <input type="text" name="protocols" readonly class="readonly" />
+
+            <label>Image URL</label>
+            <input type="text" name="image" required />
+
+            <label>Content URL (zip file)</label>
+            <input type="text" name="contentUrl" required />
+
+            <label>contentSize (bytes)</label>
+            <input type="text" name="contentSize" readonly class="readonly" />
+
+            <button type="button" id="packButton" disabled>Pack</button>
+        </form>
+        <div id="successMsg" style="display: none; margin-top: 1.5em; color: green; font-weight: bold;"></div>
+    </div>
+
+
+
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        const filesMap = new Map();
+
+        dropzone.addEventListener('dragover', e => e.preventDefault());
+
+        dropzone.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            filesMap.clear();
+            dropzone.textContent = 'Reading folder...';
+            const formContainer = document.getElementById('formContainer');
+            const warningBox = document.getElementById('warning');
+            const packButton = document.getElementById('packButton');
+
+            formContainer.style.display = 'none';
+            warningBox.textContent = '';
+            packButton.disabled = true;
+
+            const items = e.dataTransfer.items;
+            for (const item of items) {
+                const entry = item.webkitGetAsEntry?.();
+                if (entry) {
+                    const rootFolder = entry.name + '/';
+                    await readEntry(entry, '', rootFolder);
+                }
+            }
+
+            dropzone.textContent = `App loaded, ${filesMap.size} files detected.`;
+
+            let hasAppInfo = false;
+            let hasIndexHtml = false;
+
+            for (const path of filesMap.keys()) {
+                const p = path.toLowerCase();
+                if (p === 'appinfo.spixi') hasAppInfo = true;
+                if (p === 'app/index.html') hasIndexHtml = true;
+            }
+
+            if (!hasAppInfo || !hasIndexHtml) {
+                document.getElementById('warning').textContent =
+                    'Missing required files: ' +
+                    (!hasAppInfo ? 'appinfo.spixi ' : '') +
+                    (!hasIndexHtml ? 'app/index.html' : '');
+                return;
+            }
+            formContainer.style.display = 'block';
+            packButton.disabled = false;
+
+            // Auto-parse appinfo file
+            for (const [path, file] of filesMap.entries()) {
+                if (path.toLowerCase() === 'appinfo.spixi') {
+                    parseSpixiFile(file);
+                    break;
+                }
+            }
+        });
+
+
+
+        async function readEntry(entry, pathPrefix, rootFolder) {
+            if (entry.isFile) {
+                await new Promise((resolve) => {
+                    entry.file((file) => {
+                        const fullPath = pathPrefix + entry.name;
+                        const zipPath = fullPath.startsWith(rootFolder)
+                            ? fullPath.slice(rootFolder.length)
+                            : fullPath;
+                        console.log("Found:", zipPath);
+                        filesMap.set(zipPath, file);
+                        resolve();
+                    });
+                });
+            } 
+            else if (entry.isDirectory) {
+                const reader = entry.createReader();
+                await new Promise((resolve) => {
+                    reader.readEntries(async (entries) => {
+                        for (const child of entries) {
+                            await readEntry(child, pathPrefix + entry.name + '/', rootFolder);
+                        }
+                        resolve();
+                    });
+                });
+            }
+        }
+
+        async function parseSpixiFile(file) {
+            const text = await file.text();
+            const lines = text.split(/\r?\n/);
+            const spixi = {};
+
+            for (const line of lines) {
+                const match = line.match(/^\s*([^=]+?)\s*=\s*(.*?)\s*$/);
+                if (match) {
+                    spixi[match[1]] = match[2];
+                }
+            }
+
+            const form = document.getElementById('spixiForm');
+
+            for (const key in spixi) {
+                if (form.elements[key]) {
+                    form.elements[key].value = spixi[key];
+                }
+            }
+
+            // Auto-fill image and contentUrl based on 'name'
+            const appName = spixi.name?.trim().replace(/\s+/g, '-').toLowerCase();
+            if (appName) {
+                if (form.elements['image'].value === '') {
+                    form.elements['image'].value = `${appName}.png`;
+                }
+                if (form.elements['contentUrl'].value === '') {
+                    form.elements['contentUrl'].value = `${appName}.zip`;
+                }
+            }
+        }
+
+
+        document.getElementById('packButton').addEventListener('click', async () => {
+            if (!filesMap.size) {
+                alert("No app folder loaded.");
+                return;
+            }
+
+            const zip = new JSZip();
+
+            for (const [path, file] of filesMap.entries()) {
+                zip.file(path, file);
+            }
+
+            const zipBlob = await zip.generateAsync({
+                type: "blob",
+                compression: "DEFLATE",
+                compressionOptions: { level: 6 }
+            });
+            const contentSize = zipBlob.size;
+
+            const checksum = await computeSHA256(zipBlob);
+
+            const form = document.getElementById("spixiForm");
+            form.elements['contentSize'].value = contentSize;
+
+            const data = Object.fromEntries(new FormData(form).entries());
+
+            const spixiText = `caVersion = ${data.caVersion}
+id = ${data.id}
+publisher = ${data.publisher}
+name = ${data.name}
+version = ${data.version}
+capabilities = ${data.capabilities}
+image = ${data.image}
+minUsers = ${data.minUsers}
+maxUsers = ${data.maxUsers}
+protocols = ${data.protocols}
+contentUrl = ${data.contentUrl}
+checksum = ${checksum}
+contentSize = ${contentSize}`;
+
+            const spixiBlob = new Blob([spixiText], { type: "text/plain" });
+
+            const baseName = data.name.trim().replaceAll(' ', '-').toLowerCase();
+            saveAs(zipBlob, `${baseName}.zip`);
+            saveAs(spixiBlob, `${baseName}.spixi`);
+
+            const iconFile = filesMap.get('icon.png');
+            if (iconFile) {
+                saveAs(iconFile, `${baseName}.png`);
+            } else {
+                console.warn("icon.png not found — skipping export.");
+            }
+
+            const successMsg = document.getElementById('successMsg');
+            successMsg.innerHTML = `Packing complete, files saved to Download folder.<br/>Upload the following files to your web host:<br/>
+            • ${baseName}.spixi<br/>
+            • ${baseName}.zip<br/>      
+            • ${baseName}.png`;
+            successMsg.style.display = 'block';
+        });
+
+        async function computeSHA256(blob) {
+            const buffer = await blob.arrayBuffer();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+            return Array.from(new Uint8Array(hashBuffer))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+    </script>
+</body>
+
+</html>
