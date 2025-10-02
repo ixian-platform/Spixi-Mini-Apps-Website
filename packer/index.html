@@ -7,10 +7,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         body {
-            font-family: sans-serif;
-            max-width: 600px;
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: #0D141C;
+            color: #e6e6e6;
+            max-width: 900px;
             margin: auto;
-            padding: 2em;
+            padding: 0 2em;
+            line-height: 1.7;
         }
 
         .dropzone {
@@ -18,8 +21,7 @@
             border-radius: 10px;
             padding: 2em;
             text-align: center;
-            margin-bottom: 1em;
-            color: #555;
+            margin-bottom: 1.5em;
             cursor: pointer;
         }
 
@@ -34,16 +36,17 @@
             padding: 0.5em;
             margin-top: 0.2em;
             box-sizing: border-box;
+            border-radius: 5px;
+            font-weight: 400;
         }
 
         input.readonly {
-            background-color: #f0f0f0;
-            color: #555;
+            background-color: #d0d0d0;
+            color: #333;
             border: 1px solid #ccc;
         }
 
         button {
-            margin-top: 1.5em;
             padding: 0.75em 1.5em;
             font-size: 1em;
             border: none;
@@ -56,15 +59,47 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        #warning {
+            text-align: center;
+            color: #FF9999;
+            font-weight: bold;
+            margin-bottom: 1em;
+        }
+
+        #appIcon {
+            max-width: 100px;
+            max-height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Spixi MiniApp Packer v1.0</h1>
+    <h1 style="text-align: center;">Spixi MiniApp Packer v1.1</h1>
     <div class="dropzone" id="dropzone">Drop your app folder here</div>
-    <div id="warning" style="color: red; font-weight: bold; margin-bottom: 1em;"></div>
+    <div id="warning"></div>
+
+    <div id="appPreview" style="display:none; justify-content:center; align-items:center; margin-bottom:1em; gap:1em;">
+        <img id="appIcon" src="" alt="App Icon" style="width:80px; height:80px; border:1px solid #ccc; border-radius:10px;">
+        <div style="text-align:left; line-height: 1.5;">
+            <h2 id="appTitle" style="margin:0;"></h2>
+            <div id="appPublisher" style="margin: 0; color: #999; font-weight: bold;"></div>
+            <div id="appId" style="margin: 0; color: #999;"></div>
+        </div>
+    </div>
 
     <div id="formContainer" style="display: none;">
+        <div style="text-align: center;">
+            <div id="successMsg" style="display: none; margin: 1em; color: #2c2; font-weight: bold;"></div>
+            <button type="button" id="packButton" disabled>Pack</button>
+        </div>
+
         <form id="spixiForm">
             <label>caVersion</label>
             <input type="text" name="caVersion" value="0" readonly class="readonly" />
@@ -100,16 +135,16 @@
             <input type="text" name="contentUrl" required />
 
             <label>contentSize (bytes)</label>
-            <input type="text" name="contentSize" readonly class="readonly" />
-
-            <button type="button" id="packButton" disabled>Pack</button>
+            <input type="text" name="contentSize" readonly class="readonly" style="margin-bottom:1.5em" />
         </form>
-        <div id="successMsg" style="display: none; margin-top: 1.5em; color: green; font-weight: bold;"></div>
     </div>
 
-
+    <footer>
+        <p>IXI Labs &copy; 2025</p>
+    </footer>
 
     <script>
+        const preview = document.getElementById('appPreview');
         const dropzone = document.getElementById('dropzone');
         const filesMap = new Map();
 
@@ -152,6 +187,8 @@
                     'Missing required files: ' +
                     (!hasAppInfo ? 'appinfo.spixi ' : '') +
                     (!hasIndexHtml ? 'app/index.html' : '');
+                formContainer.style.display = 'none';
+                preview.style.display = 'none';
                 return;
             }
             formContainer.style.display = 'block';
@@ -181,7 +218,7 @@
                         resolve();
                     });
                 });
-            } 
+            }
             else if (entry.isDirectory) {
                 const reader = entry.createReader();
                 await new Promise((resolve) => {
@@ -218,13 +255,30 @@
             // Auto-fill image and contentUrl based on 'name'
             const appName = spixi.name?.trim().replace(/\s+/g, '-').toLowerCase();
             if (appName) {
-                if (form.elements['image'].value === '') {
-                    form.elements['image'].value = `${appName}.png`;
-                }
-                if (form.elements['contentUrl'].value === '') {
-                    form.elements['contentUrl'].value = `${appName}.zip`;
-                }
+                form.elements['image'].value = `${appName}.png`;
+                form.elements['contentUrl'].value = `${appName}.zip`;
             }
+
+            // Show preview
+            const preview = document.getElementById('appPreview');
+            const titleEl = document.getElementById('appTitle');
+            const idEl = document.getElementById('appId');
+            const publisherEl = document.getElementById('appPublisher');
+            const iconEl = document.getElementById('appIcon');
+
+            titleEl.textContent = spixi.name + " v" + spixi.version;
+            idEl.textContent = spixi.id || '';
+            publisherEl.textContent = spixi.publisher || '';
+
+            const iconFile = filesMap.get('icon.png');
+            if (iconFile) {
+                const url = URL.createObjectURL(iconFile);
+                iconEl.src = url;
+            } else {
+                iconEl.src = '';
+            }
+
+            preview.style.display = 'flex';
         }
 
 
@@ -237,6 +291,12 @@
             const zip = new JSZip();
 
             for (const [path, file] of filesMap.entries()) {
+
+                if (!path.startsWith('app/')
+                    && !path.startsWith('appinfo.spixi')
+                    && !path.startsWith('icon.png')) {
+                    continue;
+                }
                 zip.file(path, file);
             }
 
@@ -282,10 +342,10 @@ contentSize = ${contentSize}`;
             }
 
             const successMsg = document.getElementById('successMsg');
-            successMsg.innerHTML = `Packing complete, files saved to Download folder.<br/>Upload the following files to your web host:<br/>
-            • ${baseName}.spixi<br/>
-            • ${baseName}.zip<br/>      
-            • ${baseName}.png`;
+            successMsg.innerHTML = `Packing complete, files saved to Downloads folder.<br/>Upload the following files to your web host:<br/>
+                                • ${baseName}.spixi<br/>
+                                • ${baseName}.zip<br/>
+                                • ${baseName}.png`;
             successMsg.style.display = 'block';
         });
 
