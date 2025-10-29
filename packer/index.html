@@ -3,64 +3,103 @@
 <head>
     <meta charset="UTF-8" />
     <title>Spixi MiniApp Packer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
+        :root {
+            --bg: #0D141C;
+            --fg: #e6e6e6;
+            --muted: #9AA5B1;
+            --accent: #4da3ff;
+            --accent-strong: #1f82ff;
+            --ok: #18c37e;
+            --ok-900: #0f2f25;
+            --ok-700: #144a3b;
+            --card: #101925;
+            --card-2: #0b1520;
+            --border: #1e2a39;
+            --border-strong: #2a3b52;
+            --shadow: 0 10px 30px rgba(0,0,0,.45);
+            --ring: 0 0 0 3px rgba(77,163,255,.25);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: "Segoe UI", Roboto, Arial, sans-serif;
-            background-color: #0D141C;
-            color: #e6e6e6;
+            background-color: var(--bg);
+            color: var(--fg);
             max-width: 900px;
             margin: auto;
-            padding: 0 2em;
+            padding: 0 2em 4rem;
             line-height: 1.7;
         }
 
         .dropzone {
-            border: 2px dashed #aaa;
-            border-radius: 10px;
+            border: 2px dashed #445266;
+            border-radius: 12px;
             padding: 2em;
             text-align: center;
             margin-bottom: 1.5em;
             cursor: pointer;
+            background: linear-gradient(180deg, rgba(255,255,255,.02), transparent);
         }
+
+            .dropzone.warning {
+                border-color: #b35b5b;
+                color: #ffb3b3;
+            }
 
         label {
             display: block;
             margin-top: 1em;
-            font-weight: bold;
+            font-weight: 600;
+            color: var(--muted);
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 0.5em;
-            margin-top: 0.2em;
-            box-sizing: border-box;
-            border-radius: 5px;
+            padding: .6em .75em;
+            margin-top: .25em;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #0f1823;
+            color: var(--fg);
             font-weight: 400;
         }
 
         input.readonly {
-            background-color: #d0d0d0;
-            color: #333;
-            border: 1px solid #ccc;
+            background-color: #0b1220;
+            color: #9fb1c7;
+            border: 1px dashed #2b3b54;
         }
 
         button {
-            padding: 0.75em 1.5em;
+            padding: 0.75em 1.2em;
             font-size: 1em;
             border: none;
-            border-radius: 5px;
-            background-color: #007bff;
+            border-radius: 10px;
+            background: linear-gradient(180deg, var(--accent), var(--accent-strong));
             color: white;
             cursor: pointer;
+            box-shadow: var(--shadow);
+            font-weight: 700;
+            letter-spacing: .2px;
         }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+            button:hover {
+                filter: brightness(1.06)
+            }
 
-        #warning {
+            button:focus-visible {
+                outline: none;
+                box-shadow: var(--ring);
+            }
+
+        .warning {
             text-align: center;
             color: #FF9999;
             font-weight: bold;
@@ -70,33 +109,288 @@
         #appIcon {
             max-width: 100px;
             max-height: 100px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            border: 1px solid #2a3a4f;
+            border-radius: 12px;
         }
 
         footer {
             text-align: center;
+            color: var(--muted);
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            background: radial-gradient(1200px 800px at 50% 30%, rgba(28,44,64,.75), rgba(6,10,16,.85));
+            backdrop-filter: blur(6px);
+        }
+
+            .modal-backdrop.show {
+                display: flex;
+                animation: fadeIn .15s ease-out;
+            }
+
+        .modal {
+            width: min(680px, 92vw);
+            background: linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 22px 22px 18px;
+            position: relative;
+            overflow: clip;
+            transform-origin: 50% 40%;
+            animation: popIn .16s ease-out;
+        }
+
+            .modal::before {
+                content: "";
+                position: absolute;
+                inset: 0 0 auto 0;
+                height: 4px;
+                background: linear-gradient(90deg, #1bd18b, #45e0a5, #1bd18b);
+                filter: drop-shadow(0 0 10px rgba(24,195,126,.35));
+                background-size: 200% 100%;
+                animation: shimmer 2.2s linear infinite;
+            }
+
+            .modal .close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                border: none;
+                background: transparent;
+                color: #7e8da3;
+                font-size: 22px;
+                cursor: pointer;
+                border-radius: 8px;
+            }
+
+                .modal .close:focus-visible {
+                    outline: none;
+                    box-shadow: var(--ring);
+                }
+
+        .modal-header {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(60% 60% at 50% 35%, rgba(24,195,126,.18), transparent), var(--ok-900);
+            border: 1px solid rgba(24,195,126,.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .badge::after {
+                content: "";
+                position: absolute;
+                inset: -60% -60% auto auto;
+                width: 120%;
+                height: 120%;
+                transform: rotate(25deg);
+                background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,.08), transparent 70%);
+                animation: shine 2.2s ease-in-out infinite;
+                pointer-events: none;
+            }
+
+            .badge svg {
+                width: 24px;
+                height: 24px;
+                color: var(--ok);
+            }
+
+        .modal h3 {
+            margin: 0;
+            font-size: 1.28rem;
+        }
+
+        .modal p {
+            margin: .25rem 0 .5rem;
+            color: var(--muted);
+        }
+
+        .kv {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: .5rem .8rem;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--card-2);
+        }
+
+            .kv code {
+                background: #0d1b2a;
+                padding: .25rem .45rem;
+                border-radius: 6px;
+                border: 1px solid #1d2a3d;
+                word-break: break-all;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-size: .95em;
+            }
+
+        .files {
+            margin: .9rem 0 0;
+            padding: 12px;
+            border: 1px dashed #2b3b54;
+            border-radius: 12px;
+            background: #0c1622;
+        }
+
+            .files header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                margin-bottom: .4rem;
+            }
+
+            .files ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .files li {
+                display: flex;
+                align-items: center;
+                gap: .6rem;
+                padding: .4rem .5rem;
+                border-radius: 10px;
+            }
+
+                .files li + li {
+                    margin-top: .15rem;
+                }
+
+            .files .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #2f8f6b;
+                box-shadow: 0 0 0 2px rgba(24,195,126,.18) inset;
+            }
+
+            .files .file {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            }
+
+        .hint {
+            color: #a9b6c7;
+            font-size: .92rem;
+            margin-top: .45rem;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: .6rem;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+
+        .btn-secondary {
+            background: #122034;
+            border: 1px solid #27374e;
+            box-shadow: none;
+            font-weight: 600;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid #27374e;
+            color: #cfe1ff;
+            font-weight: 600;
+        }
+
+            .btn-secondary:focus-visible, .btn-ghost:focus-visible {
+                outline: none;
+                box-shadow: var(--ring);
+            }
+
+        @media (prefers-reduced-motion: reduce) {
+            .modal-backdrop.show, .modal {
+                animation: none;
+            }
+
+            .badge::after {
+                display: none;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                transform: translateY(2px) scale(.98);
+                opacity: .92;
+            }
+
+            to {
+                transform: none;
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes shine {
+            0%, 80% {
+                transform: translateX(-140%) rotate(25deg);
+            }
+
+            100% {
+                transform: translateX(40%) rotate(25deg);
+            }
         }
     </style>
 </head>
-
 <body>
-    <h1 style="text-align: center;">Spixi MiniApp Packer v1.1</h1>
+    <h1 style="text-align:center">Spixi MiniApp Packer v1.2</h1>
     <div class="dropzone" id="dropzone">Drop your app folder here</div>
-    <div id="warning"></div>
 
     <div id="appPreview" style="display:none; justify-content:center; align-items:center; margin-bottom:1em; gap:1em;">
-        <img id="appIcon" src="" alt="App Icon" style="width:80px; height:80px; border:1px solid #ccc; border-radius:10px;">
+        <img id="appIcon" src="" alt="App Icon" style="width:80px; height:80px; border:1px solid #2a3a4f; border-radius:10px;">
         <div style="text-align:left; line-height: 1.5;">
-            <h2 id="appTitle" style="margin:0;"></h2>
-            <div id="appPublisher" style="margin: 0; color: #999; font-weight: bold;"></div>
-            <div id="appId" style="margin: 0; color: #999;"></div>
+            <h2 id="appTitle" style="margin:0"></h2>
+            <div id="appPublisher" style="margin:0; color:#9fb1c7; font-weight:bold"></div>
+            <div id="appId" style="margin:0; color:#9fb1c7"></div>
         </div>
     </div>
 
-    <div id="formContainer" style="display: none;">
-        <div style="text-align: center;">
-            <div id="successMsg" style="display: none; margin: 1em; color: #2c2; font-weight: bold;"></div>
+    <div id="formContainer" style="display:none">
+        <div style="text-align:center">
+            <div id="successMsg" style="display:none; margin:1em; color:#2c2; font-weight:bold"></div>
             <button type="button" id="packButton" disabled>Pack</button>
         </div>
 
@@ -139,9 +433,47 @@
         </form>
     </div>
 
-    <footer>
-        <p>IXI Labs &copy; 2025</p>
-    </footer>
+    <footer><p>IXI Labs &copy; 2025</p></footer>
+
+    <div id="completeModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-sub">
+        <div class="modal" role="document">
+            <button class="close" aria-label="Close" id="modalClose">✕</button>
+            <div class="modal-header">
+                <div class="badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="modal-title">Packing complete</h3>
+                </div>
+            </div>
+
+            <div class="kv">
+                <div>App</div>
+                <div><code id="kv-app"></code></div>
+                <div>Version</div>
+                <div><code id="kv-ver"></code></div>
+                <div>Checksum (SHA-256)</div>
+                <div><code id="kv-sha"></code></div>
+                <div>Content size</div>
+                <div><code id="kv-size"></code></div>
+            </div>
+
+            <div class="files" aria-label="Generated files">
+                <header>
+                    <span>Files saved to your Downloads folder:</span>
+                    <button class="btn-ghost" id="copyBtn" type="button" title="Copy details">Copy details</button>
+                </header>
+                <ul id="fileList"></ul>
+                <div class="hint">Upload the above files to your web host. If the downloaded files were auto-renamed by the browser, rename them to the names shown above before uploading.</div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" id="modalOk" type="button">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const preview = document.getElementById('appPreview');
@@ -153,13 +485,14 @@
         dropzone.addEventListener('drop', async (e) => {
             e.preventDefault();
             filesMap.clear();
+            dropzone.className = "dropzone";
             dropzone.textContent = 'Reading folder...';
             const formContainer = document.getElementById('formContainer');
-            const warningBox = document.getElementById('warning');
             const packButton = document.getElementById('packButton');
 
+            successMsg.style.display = 'none';
             formContainer.style.display = 'none';
-            warningBox.textContent = '';
+            preview.style.display = 'none';
             packButton.disabled = true;
 
             const items = e.dataTransfer.items;
@@ -183,10 +516,11 @@
             }
 
             if (!hasAppInfo || !hasIndexHtml) {
-                document.getElementById('warning').textContent =
-                    'Missing required files: ' +
-                    (!hasAppInfo ? 'appinfo.spixi ' : '') +
-                    (!hasIndexHtml ? 'app/index.html' : '');
+                dropzone.className = "dropzone warning";
+                dropzone.textContent = `App could not be loaded, ${filesMap.size} files detected. ` +
+                    'Missing required files:' +
+                    (!hasAppInfo ? " 'appinfo.spixi'" : '') +
+                    (!hasIndexHtml ? (!hasAppInfo ? ", 'app/index.html'" : " 'app/index.html'") : '');
                 formContainer.style.display = 'none';
                 preview.style.display = 'none';
                 return;
@@ -203,8 +537,6 @@
             }
         });
 
-
-
         async function readEntry(entry, pathPrefix, rootFolder) {
             if (entry.isFile) {
                 await new Promise((resolve) => {
@@ -218,8 +550,7 @@
                         resolve();
                     });
                 });
-            }
-            else if (entry.isDirectory) {
+            } else if (entry.isDirectory) {
                 const reader = entry.createReader();
                 await new Promise((resolve) => {
                     reader.readEntries(async (entries) => {
@@ -236,16 +567,13 @@
             const text = await file.text();
             const lines = text.split(/\r?\n/);
             const spixi = {};
-
             for (const line of lines) {
                 const match = line.match(/^\s*([^=]+?)\s*=\s*(.*?)\s*$/);
                 if (match) {
                     spixi[match[1]] = match[2];
                 }
             }
-
             const form = document.getElementById('spixiForm');
-
             for (const key in spixi) {
                 if (form.elements[key]) {
                     form.elements[key].value = spixi[key];
@@ -260,7 +588,6 @@
             }
 
             // Show preview
-            const preview = document.getElementById('appPreview');
             const titleEl = document.getElementById('appTitle');
             const idEl = document.getElementById('appId');
             const publisherEl = document.getElementById('appPublisher');
@@ -271,16 +598,9 @@
             publisherEl.textContent = spixi.publisher || '';
 
             const iconFile = filesMap.get('icon.png');
-            if (iconFile) {
-                const url = URL.createObjectURL(iconFile);
-                iconEl.src = url;
-            } else {
-                iconEl.src = '';
-            }
-
+            iconEl.src = iconFile ? URL.createObjectURL(iconFile) : '';
             preview.style.display = 'flex';
         }
-
 
         document.getElementById('packButton').addEventListener('click', async () => {
             if (!filesMap.size) {
@@ -289,9 +609,7 @@
             }
 
             const zip = new JSZip();
-
             for (const [path, file] of filesMap.entries()) {
-
                 if (!path.startsWith('app/')
                     && !path.startsWith('appinfo.spixi')
                     && !path.startsWith('icon.png')) {
@@ -306,7 +624,6 @@
                 compressionOptions: { level: 6 }
             });
             const contentSize = zipBlob.size;
-
             const checksum = await computeSHA256(zipBlob);
 
             const form = document.getElementById("spixiForm");
@@ -327,26 +644,25 @@ protocols = ${data.protocols}
 contentUrl = ${data.contentUrl}
 checksum = ${checksum}
 contentSize = ${contentSize}`;
-
             const spixiBlob = new Blob([spixiText], { type: "text/plain" });
 
             const baseName = data.name.trim().replaceAll(' ', '-').toLowerCase();
             saveAs(zipBlob, `${baseName}.zip`);
             saveAs(spixiBlob, `${baseName}.spixi`);
-
             const iconFile = filesMap.get('icon.png');
             if (iconFile) {
                 saveAs(iconFile, `${baseName}.png`);
             } else {
-                console.warn("icon.png not found — skipping export.");
+                console.warn("icon.png not found - skipping export.");
             }
 
-            const successMsg = document.getElementById('successMsg');
-            successMsg.innerHTML = `Packing complete, files saved to Downloads folder.<br/>Upload the following files to your web host:<br/>
-                                • ${baseName}.spixi<br/>
-                                • ${baseName}.zip<br/>
-                                • ${baseName}.png`;
-            successMsg.style.display = 'block';
+            showCompleteModal({
+                app: data.name || baseName,
+                version: data.version || '-',
+                baseName,
+                checksum,
+                contentSize
+            });
         });
 
         async function computeSHA256(blob) {
@@ -356,7 +672,66 @@ contentSize = ${contentSize}`;
                 .map(b => b.toString(16).padStart(2, '0'))
                 .join('');
         }
+
+        const modalEl = document.getElementById('completeModal');
+        const closeEl = document.getElementById('modalClose');
+        const okEl = document.getElementById('modalOk');
+        const copyBtn = document.getElementById('copyBtn');
+        const fileList = document.getElementById('fileList');
+
+        function bytesToNice(n) {
+            if (!Number.isFinite(n)) return '-';
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let i = 0; let v = Number(n);
+            while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+            return `${v.toFixed(v < 10 && i > 0 ? 2 : 0)} ${units[i]}`;
+        }
+
+        function showCompleteModal({ app, version, baseName, checksum, contentSize }) {
+            document.getElementById('kv-app').textContent = app;
+            document.getElementById('kv-ver').textContent = version;
+            document.getElementById('kv-sha').textContent = checksum;
+            document.getElementById('kv-size').textContent = `${contentSize} bytes (${bytesToNice(contentSize)})`;
+
+            fileList.innerHTML = '';
+            ['.spixi', '.zip', '.png'].forEach(ext => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="dot" aria-hidden="true"></span><span class="file">${baseName}${ext}</span>`;
+                fileList.appendChild(li);
+            });
+
+            modalEl.classList.add('show');
+            setTimeout(() => closeEl.focus(), 0);
+        }
+
+        function hideCompleteModal() { modalEl.classList.remove('show'); }
+
+        closeEl.addEventListener('click', hideCompleteModal);
+        okEl.addEventListener('click', hideCompleteModal);
+        modalEl.addEventListener('click', (e) => { if (e.target === modalEl) hideCompleteModal(); });
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalEl.classList.contains('show')) hideCompleteModal(); });
+
+        copyBtn.addEventListener('click', async () => {
+            const app = document.getElementById('kv-app').textContent;
+            const ver = document.getElementById('kv-ver').textContent;
+            const sha = document.getElementById('kv-sha').textContent;
+            const size = document.getElementById('kv-size').textContent;
+            const files = [...fileList.querySelectorAll('.file')].map(n => `- ${n.textContent}`).join('\n');
+            const text = `Packing complete
+App: ${app}
+Version: ${ver}
+Checksum: ${sha}
+Content size: ${size}
+Files:
+${files}`;
+            try {
+                await navigator.clipboard.writeText(text);
+                copyBtn.textContent = 'Copied';
+                setTimeout(() => copyBtn.textContent = 'Copy details', 1400);
+            } catch (err) {
+                console.warn('Clipboard failed', err);
+            }
+        });
     </script>
 </body>
-
 </html>
