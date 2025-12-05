@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spixi Mini Apps</title>
+  <meta name="description" content="Discover mini apps that run inside Spixi - real-time games, tools, and experiments.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/icons/spixi-logo.svg">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@500;600&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="hero">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar__logo">
+        <a href="/">
+          <img src="assets/icons/spixi-logo.svg" alt="Spixi" width="32" height="32">
+        </a>
+      </div>
+      
+      <div class="navbar__nav">
+        <a href="#" class="navbar__link navbar__link--active">Mini Apps</a>
+        <a href="https://www.spixi.io" class="navbar__link">Spixi Website</a>
+      </div>
+      
+      <div class="navbar__actions">
+        <a href="https://www.spixi.io/download" class="btn btn-md btn-outlined">
+          <span class="btn__label">Download Spixi</span>
+        </a>
+        
+        <!-- Mobile hamburger menu button -->
+        <button class="navbar__menu-btn" aria-label="Open menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+    
+    <!-- Hero Content -->
+    <div class="hero__content">
+      <div class="hero__text">
+        <div class="hero__text-content">
+          <p class="hero__eyebrow">Mini App Directory</p>
+          <h1 class="hero__title">Spixi Mini Apps</h1>
+          <p class="hero__description">Mini apps that run inside Spixi, real-time games, tools, and experiments.</p>
+        </div>
+        
+        <div class="hero__cta">
+          <div class="hero__buttons">
+            <a href="#apps" class="btn btn-lg btn-primary">
+              <span class="btn__icon btn__icon--leading">
+                <!-- Magnifying Glass Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256" fill="currentColor">
+                  <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>
+                </svg>
+              </span>
+              <span class="btn__label">Browse apps</span>
+            </a>
+            
+            <a href="#" class="btn btn-lg btn-outlined">
+              <span class="btn__label">Build a Mini App</span>
+            </a>
+          </div>
+          
+          <div class="hero__sub-cta">
+            <span class="hero__sub-cta-text">Don't have Spixi yet?</span>
+            <a href="https://www.spixi.io/download" class="hero__sub-cta-link">Get the app →</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="hero__image">
+        <img src="assets/images/hero-apps.png" alt="Spixi Mini Apps showcase">
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FEATURED APPS SECTION ==================== -->
+  <section class="featured">
+    <div class="featured__header">
+      <p class="featured__overline">Curated by Spixi Team</p>
+      <h2 class="featured__title">Featured Mini Apps</h2>
+    </div>
+    
+    <div class="featured__carousel">
+      <!-- App Card 1: AI Assistant -->
+      <article class="app-card">
+        <div class="app-card__header">
+          <img class="app-card__icon" src="assets/images/ai-assistant.png" alt="AI Assistant">
+          <span class="badge">AI</span>
+        </div>
+        <div class="app-card__content">
+          <div class="app-card__details">
+            <div class="app-card__meta">
+              <h3 class="app-card__title">AI Assistant</h3>
+              <p class="app-card__publisher">Serg</p>
+            </div>
+            <p class="app-card__description">Local LLM accessed and charged over Spixi and Ixian Platform.</p>
+          </div>
+        </div>
+        <div class="app-card__footer">
+          <a href="#" class="btn btn-sm btn-outlined">
+            <span class="btn__label">Try in Spixi</span>
+          </a>
+          <a href="#" class="app-card__github" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H108A59.75,59.75,0,0,0,60,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,40,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,80,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40h8v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,200,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM184,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.55a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h16.36a8,8,0,0,0,6.71-3.97,43.88,43.88,0,0,1,32.32-20.06A43.81,43.81,0,0,1,176,73.55a8,8,0,0,0,1.1,7.97A41.74,41.74,0,0,1,184,104Z"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- App Card 2: IXIJump -->
+      <article class="app-card">
+        <div class="app-card__header">
+          <img class="app-card__icon" src="assets/images/ixijump.png" alt="IXIJump">
+          <span class="badge">Games</span>
+        </div>
+        <div class="app-card__content">
+          <div class="app-card__details">
+            <div class="app-card__meta">
+              <h3 class="app-card__title">IXIJump</h3>
+              <p class="app-card__publisher">Spoony</p>
+            </div>
+            <p class="app-card__description">A fast-paced tapping game built for Spixi. Simple and addictive.</p>
+          </div>
+        </div>
+        <div class="app-card__footer">
+          <a href="#" class="btn btn-sm btn-outlined">
+            <span class="btn__label">Try in Spixi</span>
+          </a>
+          <a href="#" class="app-card__github" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H108A59.75,59.75,0,0,0,60,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,40,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,80,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40h8v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,200,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM184,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.55a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h16.36a8,8,0,0,0,6.71-3.97,43.88,43.88,0,0,1,32.32-20.06A43.81,43.81,0,0,1,176,73.55a8,8,0,0,0,1.1,7.97A41.74,41.74,0,0,1,184,104Z"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- App Card 3: Tic Tac Toe -->
+      <article class="app-card">
+        <div class="app-card__header">
+          <img class="app-card__icon" src="assets/images/tictactoe.png" alt="Tic Tac Toe">
+          <span class="badge">Games</span>
+        </div>
+        <div class="app-card__content">
+          <div class="app-card__details">
+            <div class="app-card__meta">
+              <h3 class="app-card__title">Tic Tac Toe</h3>
+              <p class="app-card__publisher">IXI Labs</p>
+            </div>
+            <p class="app-card__description">Challenge friends to a quick game and settle debates instantly.</p>
+          </div>
+        </div>
+        <div class="app-card__footer">
+          <a href="#" class="btn btn-sm btn-outlined">
+            <span class="btn__label">Try in Spixi</span>
+          </a>
+          <a href="#" class="app-card__github" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H108A59.75,59.75,0,0,0,60,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,40,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,80,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40h8v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,200,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM184,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.55a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h16.36a8,8,0,0,0,6.71-3.97,43.88,43.88,0,0,1,32.32-20.06A43.81,43.81,0,0,1,176,73.55a8,8,0,0,0,1.1,7.97A41.74,41.74,0,0,1,184,104Z"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- App Card 4: Whiteboard -->
+      <article class="app-card">
+        <div class="app-card__header">
+          <img class="app-card__icon" src="assets/images/whiteboard.png" alt="Whiteboard">
+          <span class="badge">Tools</span>
+        </div>
+        <div class="app-card__content">
+          <div class="app-card__details">
+            <div class="app-card__meta">
+              <h3 class="app-card__title">Whiteboard</h3>
+              <p class="app-card__publisher">IXI Labs</p>
+            </div>
+            <p class="app-card__description">Draw together in real time. Share doodles and notes with friends.</p>
+          </div>
+        </div>
+        <div class="app-card__footer">
+          <a href="#" class="btn btn-sm btn-outlined">
+            <span class="btn__label">Try in Spixi</span>
+          </a>
+          <a href="#" class="app-card__github" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H108A59.75,59.75,0,0,0,60,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,40,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,80,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40h8v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,200,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM184,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.55a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h16.36a8,8,0,0,0,6.71-3.97,43.88,43.88,0,0,1,32.32-20.06A43.81,43.81,0,0,1,176,73.55a8,8,0,0,0,1.1,7.97A41.74,41.74,0,0,1,184,104Z"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+  
+  <!-- ==================== APP DIRECTORY SECTION ==================== -->
+  <section id="apps" class="directory">
+    <div class="directory__header">
+      <p class="directory__overline">Mini App Directory</p>
+      <h2 class="directory__title">All Mini Apps</h2>
+    </div>
+    
+    <div class="directory__controls">
+      <div class="directory__search">
+        <input 
+          type="text" 
+          class="directory__search-input" 
+          placeholder="Search mini apps…"
+          id="search-input"
+        >
+        <span class="directory__search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>
+          </svg>
+        </span>
+      </div>
+      
+      <div class="directory__filters" id="category-filters">
+        <button class="filter-btn filter-btn--active" data-category="All">All</button>
+        <button class="filter-btn" data-category="AI">AI</button>
+        <button class="filter-btn" data-category="Games">Games</button>
+        <button class="filter-btn" data-category="IoT">IoT</button>
+        <button class="filter-btn" data-category="Tools">Tools</button>
+        <button class="filter-btn" data-category="Dev Tools">Dev Tools</button>
+      </div>
+    </div>
+    
+    <div class="directory__grid" id="app-grid">
+      <!-- Apps will be loaded here by JavaScript -->
+    </div>
+    
+    <button class="btn btn-lg btn-outlined directory__load-more" id="load-more-btn">
+      <span class="btn__icon btn__icon--leading">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+          <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm48-88a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"/>
+        </svg>
+      </span>
+      <span class="btn__label">Load more apps</span>
+    </button>
+  </section>
+
+  <!-- ==================== DEV CTA SECTION ==================== -->
+  <section class="dev-cta">
+    <div class="dev-cta__band">
+      <div class="dev-cta__content">
+        <p class="dev-cta__overline">For Developers</p>
+        <div class="dev-cta__text">
+          <h2 class="dev-cta__title">Build Mini Apps that run inside Spixi.</h2>
+          <p class="dev-cta__description">Use web-friendly tech, plug into Ixian's secure overlay network, and ship real-time features without running your own messaging backend.</p>
+        </div>
+      </div>
+      <div class="dev-cta__buttons">
+        <a href="#" class="btn btn-md btn-primary">
+          <span class="btn__label">Build a Mini App</span>
+        </a>
+        <a href="#" class="btn btn-md btn-outlined">
+          <span class="btn__label">Read the docs</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__content">
+        <!-- Left - Brand -->
+        <div class="footer__brand">
+          <div class="footer__brand-info">
+            <div class="footer__logo">
+              <img src="assets/icons/spixi-logo.svg" alt="Spixi" class="footer__logo-icon">
+              <span class="footer__logo-text">Spixi</span>
+            </div>
+            <p class="footer__tagline">Private messaging with IXI wallet and mini apps.</p>
+          </div>
+          <div class="footer__socials">
+            <a href="https://twitter.com/IXIcash" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on X (Twitter)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+                <path d="M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.29l62.6,98.38L41.08,210.62a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z"/>
+              </svg>
+            </a>
+            <a href="https://github.com/ProjectIxian" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+                <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H108A59.75,59.75,0,0,0,60,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,40,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,80,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40h8v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,200,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM184,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.55a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h16.36a8,8,0,0,0,6.71-3.97,43.88,43.88,0,0,1,32.32-20.06A43.81,43.81,0,0,1,176,73.55a8,8,0,0,0,1.1,7.97A41.74,41.74,0,0,1,184,104Z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Right - Navigation -->
+        <nav class="footer__nav">
+          <div class="footer__nav-column">
+            <h3 class="footer__nav-title">Product</h3>
+            <a href="https://www.spixi.io" class="footer__nav-link">Home</a>
+            <a href="https://www.spixi.io/download" class="footer__nav-link">Download Spixi</a>
+            <a href="https://www.spixi.io/#how-it-works" class="footer__nav-link">How it works</a>
+          </div>
+          <div class="footer__nav-column">
+            <h3 class="footer__nav-title">Company & legal</h3>
+            <a href="https://www.ixian.io" class="footer__nav-link" target="_blank" rel="noopener noreferrer">Ixian Website</a>
+            <a href="https://www.ixilabs.io" class="footer__nav-link" target="_blank" rel="noopener noreferrer">IXI Labs Website</a>
+            <a href="https://www.spixi.io/privacy" class="footer__nav-link">Privacy Policy</a>
+            <a href="https://www.spixi.io/terms" class="footer__nav-link">Terms of Use</a>
+          </div>
+        </nav>
+      </div>
+      
+      <p class="footer__copyright">© 2025 IXI Labs. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>
