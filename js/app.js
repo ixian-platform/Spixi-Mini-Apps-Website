@@ -73,7 +73,13 @@ function renderApps() {
   const appsToShow = filteredApps.slice(0, displayedCount);
   
   if (appsToShow.length === 0) {
-    appGrid.innerHTML = '<p style="color: var(--color-text-02); padding: var(--spacing-xl); text-align: center; grid-column: 1 / -1;">No apps found matching your criteria.</p>';
+    appGrid.innerHTML = `
+      <div class="empty-state">
+        <img src="assets/icons/SmileyMeh.svg" alt="" class="empty-state__icon">
+        <h3 class="empty-state__title">No apps found</h3>
+        <p class="empty-state__description">Try adjusting your search or filter to find what you're looking for.</p>
+      </div>
+    `;
     return;
   }
   
@@ -143,12 +149,14 @@ function filterByCategory(category) {
  * Update category filter button states
  */
 function updateCategoryButtons() {
-  const buttons = document.querySelectorAll('.filter-btn');
+  const buttons = document.querySelectorAll('.chip');
   buttons.forEach(btn => {
     if (btn.dataset.category === activeCategory) {
-      btn.classList.add('filter-btn--active');
+      btn.classList.remove('chip--default');
+      btn.classList.add('chip--selected');
     } else {
-      btn.classList.remove('filter-btn--active');
+      btn.classList.remove('chip--selected');
+      btn.classList.add('chip--default');
     }
   });
 }
@@ -207,8 +215,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Category filter listeners
   if (categoryFilters) {
     categoryFilters.addEventListener('click', (e) => {
-      if (e.target.classList.contains('filter-btn')) {
-        filterByCategory(e.target.dataset.category);
+      const chip = e.target.closest('.chip');
+      if (chip && chip.dataset.category) {
+        filterByCategory(chip.dataset.category);
       }
     });
   }
@@ -217,4 +226,126 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loadMoreBtn) {
     loadMoreBtn.addEventListener('click', loadMore);
   }
+
+  // Modal functionality
+  setupModal();
 });
+
+/**
+ * Setup modal functionality
+ */
+function setupModal() {
+  const modalOverlay = document.getElementById('modal-overlay');
+  const appModal = document.getElementById('app-modal');
+  const closeBtn = document.getElementById('close-modal-btn');
+  const copyBtn = document.getElementById('copy-url-btn');
+
+  if (!modalOverlay || !appModal || !closeBtn) return;
+
+  // Close modal function
+  function closeModal() {
+    modalOverlay.classList.add('modal-overlay--closing');
+    setTimeout(() => {
+      modalOverlay.style.display = 'none';
+      modalOverlay.classList.remove('modal-overlay--closing');
+      document.body.style.overflow = '';
+    }, 200);
+  }
+
+  // Close button click
+  closeBtn.addEventListener('click', closeModal);
+
+  // Close on overlay click (outside modal)
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      closeModal();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.style.display !== 'none') {
+      closeModal();
+    }
+  });
+
+  // Copy URL functionality - make entire container clickable
+  const urlContainer = document.querySelector('.modal__url-container');
+  if (urlContainer) {
+    urlContainer.addEventListener('click', async () => {
+      const urlText = document.getElementById('modal-app-url').textContent;
+      try {
+        await navigator.clipboard.writeText(urlText);
+        showToast('Copied to clipboard');
+      } catch (err) {
+        console.error('Failed to copy URL:', err);
+        showToast('Failed to copy URL');
+      }
+    });
+  }
+
+  // Delegate click events for "Try in Spixi" buttons
+  document.addEventListener('click', (e) => {
+    const tryBtn = e.target.closest('.app-card__footer .btn');
+    if (tryBtn && tryBtn.textContent.includes('Try in Spixi')) {
+      e.preventDefault();
+
+      // Get app data from the card
+      const appCard = tryBtn.closest('.app-card');
+      if (!appCard) return;
+
+      const appData = {
+        icon: appCard.querySelector('.app-card__icon')?.src || '',
+        title: appCard.querySelector('.app-card__title')?.textContent || 'App Title',
+        category: appCard.querySelector('.badge')?.textContent || 'Category',
+        publisher: appCard.querySelector('.app-card__publisher')?.textContent || 'Publisher',
+        description: appCard.querySelector('.app-card__description')?.textContent || 'No description available.',
+        url: tryBtn.href || window.location.origin + '/apps/sample-app'
+      };
+
+      // Populate modal with app data
+      openModal(appData);
+    }
+  });
+}
+
+/**
+ * Open modal with app data
+ * @param {Object} appData - App information
+ */
+function openModal(appData) {
+  const modalOverlay = document.getElementById('modal-overlay');
+
+  // Populate modal fields
+  document.getElementById('modal-app-icon').src = appData.icon;
+  document.getElementById('modal-app-title').textContent = appData.title;
+  document.getElementById('modal-app-category').textContent = appData.category;
+  document.getElementById('modal-app-publisher').textContent = appData.publisher;
+  document.getElementById('modal-app-description').textContent = appData.description;
+  document.getElementById('modal-app-url').textContent = appData.url;
+
+  // For now, use a placeholder QR code image
+  // Later this can be generated dynamically based on appData.url
+  document.getElementById('modal-qr-code').src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTY2IiBoZWlnaHQ9IjE2NCIgdmlld0JveD0iMCAwIDE2NiAxNjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNjYiIGhlaWdodD0iMTY0IiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=';
+
+  // Show modal
+  modalOverlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+/**
+ * Show toast notification
+ * @param {string} message - Message to display
+ */
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.classList.add('toast--show');
+
+  // Hide toast after 2 seconds
+  setTimeout(() => {
+    toast.classList.remove('toast--show');
+  }, 2000);
+}

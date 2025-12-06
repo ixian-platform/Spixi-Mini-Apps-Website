@@ -228,12 +228,24 @@
       </div>
       
       <div class="directory__filters" id="category-filters">
-        <button class="filter-btn filter-btn--active" data-category="All">All</button>
-        <button class="filter-btn" data-category="AI">AI</button>
-        <button class="filter-btn" data-category="Games">Games</button>
-        <button class="filter-btn" data-category="IoT">IoT</button>
-        <button class="filter-btn" data-category="Tools">Tools</button>
-        <button class="filter-btn" data-category="Dev Tools">Dev Tools</button>
+        <button class="chip chip--selected" data-category="All">
+          <span class="chip__text">All</span>
+        </button>
+        <button class="chip chip--default" data-category="AI">
+          <span class="chip__text">AI</span>
+        </button>
+        <button class="chip chip--default" data-category="Games">
+          <span class="chip__text">Games</span>
+        </button>
+        <button class="chip chip--default" data-category="IoT">
+          <span class="chip__text">IoT</span>
+        </button>
+        <button class="chip chip--default" data-category="Tools">
+          <span class="chip__text">Tools</span>
+        </button>
+        <button class="chip chip--default" data-category="Dev Tools">
+          <span class="chip__text">Dev Tools</span>
+        </button>
       </div>
     </div>
     
@@ -286,12 +298,12 @@
             <p class="footer__tagline">Private messaging with IXI wallet and mini apps.</p>
           </div>
           <div class="footer__socials">
-            <a href="https://twitter.com/IXIcash" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on X (Twitter)">
+            <a href="https://x.com/SpixiIm" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on X (Twitter)">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
                 <path d="M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.29l62.6,98.38L41.08,210.62a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z"/>
               </svg>
             </a>
-            <a href="https://github.com/ProjectIxian" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+            <a href="https://github.com/ixian-platform/Spixi" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
                 <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H108A59.75,59.75,0,0,0,60,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,40,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,80,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40h8v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,200,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM184,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.55a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h16.36a8,8,0,0,0,6.71-3.97,43.88,43.88,0,0,1,32.32-20.06A43.81,43.81,0,0,1,176,73.55a8,8,0,0,0,1.1,7.97A41.74,41.74,0,0,1,184,104Z"/>
               </svg>
@@ -305,12 +317,12 @@
             <h3 class="footer__nav-title">Product</h3>
             <a href="https://www.spixi.io" class="footer__nav-link">Home</a>
             <a href="https://www.spixi.io/download" class="footer__nav-link">Download Spixi</a>
-            <a href="https://www.spixi.io/#how-it-works" class="footer__nav-link">How it works</a>
+            <a href="https://www.spixi.io/howitworks" class="footer__nav-link">How it works</a>
           </div>
           <div class="footer__nav-column">
             <h3 class="footer__nav-title">Company & legal</h3>
             <a href="https://www.ixian.io" class="footer__nav-link" target="_blank" rel="noopener noreferrer">Ixian Website</a>
-            <a href="https://www.ixilabs.io" class="footer__nav-link" target="_blank" rel="noopener noreferrer">IXI Labs Website</a>
+            <a href="https://www.ixilabs.com" class="footer__nav-link" target="_blank" rel="noopener noreferrer">IXI Labs Website</a>
             <a href="https://www.spixi.io/privacy" class="footer__nav-link">Privacy Policy</a>
             <a href="https://www.spixi.io/terms" class="footer__nav-link">Terms of Use</a>
           </div>
@@ -320,6 +332,72 @@
       <p class="footer__copyright">© 2025 IXI Labs. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Copied to clipboard</div>
+
+  <!-- Modal Overlay -->
+  <div id="modal-overlay" class="modal-overlay" style="display: none;">
+    <div id="app-modal" class="modal modal--desktop">
+      <!-- App Details Header -->
+      <div class="modal__header">
+        <div class="modal__app-image">
+          <img id="modal-app-icon" src="" alt="App Icon">
+        </div>
+        <div class="modal__details">
+          <div class="modal__meta">
+            <div class="modal__title-row">
+              <h2 id="modal-app-title" class="modal__title">Title</h2>
+              <span id="modal-app-category" class="modal__badge">Category</span>
+            </div>
+            <p id="modal-app-publisher" class="modal__publisher">Publisher</p>
+          </div>
+          <p id="modal-app-description" class="modal__description">Description</p>
+        </div>
+      </div>
+
+      <!-- Content Section -->
+      <div class="modal__content">
+        <div class="modal__container">
+          <!-- Left Column - Manual Instructions -->
+          <div class="modal__left">
+            <h3 class="modal__section-title">Add Manually</h3>
+            <ol class="modal__instructions">
+              <li>Copy the App URL</li>
+              <li>In Spixi, go to Apps → + Add Mini App</li>
+              <li>Paste the link and tap Get from URL</li>
+            </ol>
+            <div class="modal__address-section">
+              <label class="modal__label">App URL</label>
+              <div class="modal__url-container">
+                <span id="modal-app-url" class="modal__url-text">URL-address</span>
+                <button id="copy-url-btn" class="modal__copy-btn" aria-label="Copy URL">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 4v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.242a2 2 0 0 0-.602-1.43L16.083 2.57A2 2 0 0 0 14.685 2H10a2 2 0 0 0-2 2Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M16 18v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column - QR Code -->
+          <div class="modal__right">
+            <div class="modal__qr-code">
+              <img id="modal-qr-code" src="" alt="QR Code">
+            </div>
+            <p class="modal__qr-title">Scan with Spixi</p>
+            <p class="modal__qr-note">*Open this mini app on another device.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <div class="modal__footer">
+        <button id="close-modal-btn" class="modal__close-btn">Close</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="js/app.js"></script>
