@@ -1,0 +1,110 @@
+{
+  "apps": [
+    {
+      "id": "com.ixilabs.spixi.auth",
+      "name": "Spixi Authenticator",
+      "publisher": "IXI Labs",
+      "description": "No description available.",
+      "category": "Tools",
+      "featured": false,
+      "version": "1.0.0",
+      "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.auth/icon.png",
+      "spixiUrl": "spixi://app/com.ixilabs.spixi.auth",
+      "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.auth",
+      "singleUser": true,
+      "multiUser": false
+    },
+    {
+      "id": "com.ixilabs.spixi.gate-control",
+      "name": "Gate Control",
+      "publisher": "IXI Labs",
+      "description": "No description available.",
+      "category": "Tools",
+      "featured": false,
+      "version": "1.0.2",
+      "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.gate-control/icon.png",
+      "spixiUrl": "spixi://app/com.ixilabs.spixi.gate-control",
+      "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.gate-control",
+      "singleUser": true,
+      "multiUser": false
+    },
+    {
+      "id": "com.ixilabs.spixi.mini-apps-test",
+      "name": "Mini Apps Test",
+      "publisher": "IXI Labs",
+      "description": "No description available.",
+      "category": "Tools",
+      "featured": false,
+      "version": "1.2.0",
+      "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.mini-apps-test/icon.png",
+      "spixiUrl": "spixi://app/com.ixilabs.spixi.mini-apps-test",
+      "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.mini-apps-test",
+      "singleUser": true,
+      "multiUser": true
+    },
+    {
+      "id": "com.ixilabs.spixi.tictactoe",
+      "name": "Tic-Tac-Toe",
+      "publisher": "IXI Labs",
+      "description": "No description available.",
+      "category": "Tools",
+      "featured": false,
+      "version": "1.0.6",
+      "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.tictactoe/icon.png",
+      "spixiUrl": "spixi://app/com.ixilabs.spixi.tictactoe",
+      "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.tictactoe",
+      "singleUser": false,
+      "multiUser": true
+    },
+    {
+      "id": "com.ixilabs.spixi.video-test",
+      "name": "Spixi Video Test",
+      "publisher": "IXI Labs",
+      "description": "No description available.",
+      "category": "Tools",
+      "featured": false,
+      "version": "0.1.0",
+      "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.video-test/icon.png",
+      "spixiUrl": "spixi://app/com.ixilabs.spixi.video-test",
+      "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.video-test",
+      "singleUser": true,
+      "multiUser": true
+    },
+    {
+      "id": "com.ixilabs.spixi.whiteboard",
+      "name": "Whiteboard",
+      "publisher": "IXI Labs",
+      "description": "No description available.",
+      "category": "Tools",
+      "featured": false,
+      "version": "1.0.2",
+      "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.whiteboard/icon.png",
+      "spixiUrl": "spixi://app/com.ixilabs.spixi.whiteboard",
+      "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.whiteboard",
+      "singleUser": true,
+      "multiUser": true
+    },
+    {
+      "id": "com.mostnonameuser.spixi.aiassistant",
+      "name": "AI Assistant",
+      "publisher": "mostnonameuser",
+      "description": "No description available.",
+      "category": "Tools",
+      "featured": false,
+      "version": "0.1.2",
+      "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.mostnonameuser.spixi.aiassistant/icon.png",
+      "spixiUrl": "spixi://app/com.mostnonameuser.spixi.aiassistant",
+      "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.mostnonameuser.spixi.aiassistant",
+      "singleUser": true,
+      "multiUser": false
+    }
+  ],
+  "categories": [
+    "All",
+    "AI",
+    "Games",
+    "IoT",
+    "Tools",
+    "Dev Tools"
+  ]
+}
