@@ -38,8 +38,8 @@ jobs:
         with:
           node-version: '20'
           
-      - name: Update Apps List
-        run: node scripts/update_apps.js
+#      - name: Update Apps List
+#        run: node scripts/update_apps.js
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
