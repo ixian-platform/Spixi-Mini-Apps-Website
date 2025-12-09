@@ -376,7 +376,7 @@
     </style>
 </head>
 <body>
-    <h1 style="text-align:center">Spixi MiniApp Packer v1.3</h1>
+    <h1 style="text-align:center">Spixi MiniApp Packer v1.4</h1>
     <div class="dropzone" id="dropzone">Drop your app folder here</div>
 
     <div id="appPreview" style="display:none; justify-content:center; align-items:center; margin-bottom:1em; gap:1em;">
@@ -433,7 +433,7 @@
         </form>
     </div>
 
-    <footer><p>IXI Labs &copy; 2025</p></footer>
+    <footer><p>IXI Labs &copy; 2026</p></footer>
 
     <div id="completeModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-sub">
         <div class="modal" role="document">
@@ -646,7 +646,7 @@ checksum = ${checksum}
 contentSize = ${contentSize}`;
             const spixiBlob = new Blob([spixiText], { type: "text/plain" });
 
-            const baseName = data.name.trim().replaceAll(' ', '-').toLowerCase();
+            const baseName = data.id.trim().replaceAll(' ', '-').toLowerCase();
             saveAs(zipBlob, `${baseName}.zspixiapp`);
             saveAs(spixiBlob, `${baseName}.spixi`);
             const iconFile = filesMap.get('icon.png');

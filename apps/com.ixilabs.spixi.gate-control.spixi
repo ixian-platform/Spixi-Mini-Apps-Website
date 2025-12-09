@@ -1,0 +1,13 @@
+caVersion = 0
+id = com.ixilabs.spixi.gate-control
+publisher = IXI Labs
+name = Gate Control
+version = 1.0.2
+capabilities = multiUser
+image = gate-control.png
+minUsers = 
+maxUsers = 2
+protocols = com.ixilabs.gatecontrol
+contentUrl = gate-control.zspixiapp
+checksum = 89b80b9b16dd312de6fdec29c526f5180ad2d3f346d6d4f602c5b1ff8bd81b3e
+contentSize = 378855

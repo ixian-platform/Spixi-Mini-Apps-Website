@@ -1,0 +1,13 @@
+caVersion = 0
+id = com.ixilabs.spixi.whiteboard
+publisher = IXI Labs
+name = Whiteboard
+version = 1.0.2
+capabilities = multiUser
+image = whiteboard.png
+minUsers = 
+maxUsers = 3
+protocols = 
+contentUrl = whiteboard.zspixiapp
+checksum = 8bc2665d98e90a8bc36abb27d6615d081d1d773e7a6073093839a5cdd82ea5bf
+contentSize = 523662

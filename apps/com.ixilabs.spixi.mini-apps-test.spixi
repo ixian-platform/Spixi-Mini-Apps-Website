@@ -1,0 +1,13 @@
+caVersion = 0
+id = com.ixilabs.spixi.mini-apps-test
+publisher = IXI Labs
+name = Mini Apps Test
+version = 1.2.0
+capabilities = multiUser, transactionsigning
+image = mini-apps-test.png
+minUsers = 
+maxUsers = 2
+protocols = com.ixilabs.spixi.mini-apps-test
+contentUrl = mini-apps-test.zspixiapp
+checksum = 6bdd525a5a377271849ad6cd62d90fbbe3f4adae182599dd02a07583b942b939
+contentSize = 450807
