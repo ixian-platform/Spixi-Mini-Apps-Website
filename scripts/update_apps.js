@@ -47,6 +47,21 @@ function fetchText(url) {
   });
 }
 
+// Helper to check if URL exists (HEAD request)
+function checkUrlExists(url) {
+  return new Promise((resolve, reject) => {
+    const req = https.request(url, { method: 'HEAD', headers: { 'User-Agent': 'Node.js' } }, (res) => {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        resolve(true);
+      } else {
+        reject(new Error(`Status ${res.statusCode}`));
+      }
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
 // Parse .spixi key-value format
 function parseSpixiFile(content) {
   const lines = content.split('\n');
