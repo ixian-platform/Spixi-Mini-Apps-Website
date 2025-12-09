@@ -21,15 +21,30 @@ let displayedCount = 9; // Initial number of apps to show
 const appsPerPage = 6; // Number of apps to load on "load more"
 
 /**
- * Fetch apps data from JSON file
+ * Fetch apps data from JSON file or global variable
  */
 async function fetchApps() {
   try {
-    const response = await fetch('data/apps.json');
-    const data = await response.json();
+    let data;
+    if (window.SPIXI_APPS) {
+      data = window.SPIXI_APPS;
+      console.log('Loaded apps from global SPIXI_APPS');
+    } else {
+      const response = await fetch('data/apps.json');
+      data = await response.json();
+    }
+
     apps = data.apps;
     categories = data.categories;
     renderApps();
+    // renderFeaturedApps not needed if SSG injected, but harmless to call if empty
+    // Actually if SSG injected, renderFeaturedApps() might re-render logic. 
+    // If we pre-rendered it, we don't need to re-render it unless we want interactivty?
+    // app.js renderFeaturedApps logic replaces innerHTML.
+    // If it's already there, maybe we skip? 
+    // But filters/state is separate.
+    // Let's keep it consistent. If data is loaded, we can render featured apps again just to be sure JS state matches.
+    // Or check if already populated.
     renderFeaturedApps();
     updateLoadMoreVisibility();
   } catch (error) {
@@ -94,6 +109,11 @@ function renderApps() {
 function renderFeaturedApps() {
   const featuredContainer = document.querySelector('.featured__carousel');
   if (!featuredContainer) return;
+
+  // Optimize: Skip if SSG content exists and data is loaded (prevents flash)
+  if (featuredContainer.children.length > 0 && window.SPIXI_APPS) {
+    return;
+  }
 
   const featuredApps = getFeaturedApps();
 
