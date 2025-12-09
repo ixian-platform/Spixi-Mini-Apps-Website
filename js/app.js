@@ -21,15 +21,31 @@ let displayedCount = 9; // Initial number of apps to show
 const appsPerPage = 6; // Number of apps to load on "load more"
 
 /**
- * Fetch apps data from JSON file
+ * Fetch apps data from JSON file or global variable
  */
 async function fetchApps() {
   try {
-    const response = await fetch('data/apps.json');
-    const data = await response.json();
+    let data;
+    if (window.SPIXI_APPS) {
+      data = window.SPIXI_APPS;
+      console.log('Loaded apps from global SPIXI_APPS');
+    } else {
+      const response = await fetch('data/apps.json');
+      data = await response.json();
+    }
+
     apps = data.apps;
     categories = data.categories;
     renderApps();
+    // renderFeaturedApps not needed if SSG injected, but harmless to call if empty
+    // Actually if SSG injected, renderFeaturedApps() might re-render logic. 
+    // If we pre-rendered it, we don't need to re-render it unless we want interactivty?
+    // app.js renderFeaturedApps logic replaces innerHTML.
+    // If it's already there, maybe we skip? 
+    // But filters/state is separate.
+    // Let's keep it consistent. If data is loaded, we can render featured apps again just to be sure JS state matches.
+    // Or check if already populated.
+    renderFeaturedApps();
     updateLoadMoreVisibility();
   } catch (error) {
     console.error('Error loading apps:', error);
@@ -88,9 +104,36 @@ function renderApps() {
 }
 
 /**
+ * Render featured apps carousel
+ */
+function renderFeaturedApps() {
+  const featuredContainer = document.querySelector('.featured__carousel');
+  if (!featuredContainer) return;
+
+  // Optimize: Skip if SSG content exists and data is loaded (prevents flash)
+  if (featuredContainer.children.length > 0 && window.SPIXI_APPS) {
+    return;
+  }
+
+  const featuredApps = getFeaturedApps();
+
+  if (featuredApps.length === 0) {
+    // Hide featured section if no apps
+    const featuredSection = document.querySelector('.featured');
+    if (featuredSection) featuredSection.style.display = 'none';
+    return;
+  }
+
+  featuredContainer.innerHTML = featuredApps.map(app => createAppCard(app)).join('');
+}
+
+/**
  * Create HTML for a single app card
  * @param {Object} app - App data object
  * @returns {string} - HTML string
+ * 
+ * ! IMPORTANT: This logic is duplicated in scripts/update_apps.js for SSG.
+ * ! Any changes here MUST be mirrored in the build script.
  */
 function createAppCard(app) {
   const githubLink = app.github
@@ -101,18 +144,19 @@ function createAppCard(app) {
       </a>`
     : '';
 
-  const websiteLink = app.website || 'https://spixi.io';
-  const webLink = `<a href="${websiteLink}" class="app-card__github" target="_blank" rel="noopener noreferrer" aria-label="Visit Website">
+  const webLink = app.website
+    ? `<a href="${app.website}" class="app-card__github" target="_blank" rel="noopener noreferrer" aria-label="Visit Website">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" fill="currentColor">
         <path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm78.36,64H170.71a135.28,135.28,0,0,0-22.3-45.6A88.29,88.29,0,0,1,206.37,88ZM216,128a87.61,87.61,0,0,1-3.33,24H174.16a157.44,157.44,0,0,0,0-48h38.51A87.61,87.61,0,0,1,216,128ZM128,43a115.27,115.27,0,0,1,26,45H102A115.11,115.11,0,0,1,128,43ZM102,168H154a115.11,115.11,0,0,1-26,45A115.27,115.27,0,0,1,102,168Zm-3.9-16a140.84,140.84,0,0,1,0-48h59.88a140.84,140.84,0,0,1,0,48Zm50.35,61.6a135.28,135.28,0,0,0,22.3-45.6h35.66A88.29,88.29,0,0,1,148.41,213.6Z"/>
       </svg>
-    </a>`;
+    </a>`
+    : '';
 
   // Generate user capability icons
   let userCapabilityIcons = '';
   if (app.singleUser || app.multiUser) {
     userCapabilityIcons = '<div class="app-card__user-capabilities">';
-    
+
     if (app.singleUser) {
       userCapabilityIcons += `
         <div class="app-card__user-icon" title="Single User">
@@ -121,7 +165,7 @@ function createAppCard(app) {
           </svg>
         </div>`;
     }
-    
+
     if (app.multiUser) {
       userCapabilityIcons += `
         <div class="app-card__user-icon" title="Multi User">
@@ -130,7 +174,7 @@ function createAppCard(app) {
           </svg>
         </div>`;
     }
-    
+
     userCapabilityIcons += '</div>';
   }
 

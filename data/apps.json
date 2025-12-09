@@ -20,7 +20,7 @@
       "publisher": "IXI Labs",
       "description": "No description available.",
       "category": "Tools",
-      "featured": false,
+      "featured": true,
       "version": "1.0.2",
       "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.gate-control/icon.png",
       "spixiUrl": "spixi://app/com.ixilabs.spixi.gate-control",
@@ -34,13 +34,13 @@
       "publisher": "IXI Labs",
       "description": "No description available.",
       "category": "Tools",
-      "featured": false,
       "version": "1.2.0",
       "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.mini-apps-test/icon.png",
       "spixiUrl": "spixi://app/com.ixilabs.spixi.mini-apps-test",
       "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.mini-apps-test",
       "singleUser": true,
-      "multiUser": true
+      "multiUser": true,
+      "featured": true
     },
     {
       "id": "com.ixilabs.spixi.tictactoe",
@@ -48,13 +48,13 @@
       "publisher": "IXI Labs",
       "description": "No description available.",
       "category": "Tools",
-      "featured": false,
       "version": "1.0.6",
       "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.tictactoe/icon.png",
       "spixiUrl": "spixi://app/com.ixilabs.spixi.tictactoe",
       "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.tictactoe",
       "singleUser": false,
-      "multiUser": true
+      "multiUser": true,
+      "featured": true
     },
     {
       "id": "com.ixilabs.spixi.video-test",
@@ -62,7 +62,7 @@
       "publisher": "IXI Labs",
       "description": "No description available.",
       "category": "Tools",
-      "featured": false,
+      "featured": true,
       "version": "0.1.0",
       "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.video-test/icon.png",
       "spixiUrl": "spixi://app/com.ixilabs.spixi.video-test",
@@ -76,13 +76,13 @@
       "publisher": "IXI Labs",
       "description": "No description available.",
       "category": "Tools",
-      "featured": false,
       "version": "1.0.2",
       "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.ixilabs.spixi.whiteboard/icon.png",
       "spixiUrl": "spixi://app/com.ixilabs.spixi.whiteboard",
       "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.whiteboard",
       "singleUser": true,
-      "multiUser": true
+      "multiUser": true,
+      "featured": true
     },
     {
       "id": "com.mostnonameuser.spixi.aiassistant",
@@ -90,13 +90,13 @@
       "publisher": "mostnonameuser",
       "description": "No description available.",
       "category": "Tools",
-      "featured": false,
       "version": "0.1.2",
       "icon": "https://raw.githubusercontent.com/ixian-platform/Spixi-Mini-Apps/master/apps/com.mostnonameuser.spixi.aiassistant/icon.png",
       "spixiUrl": "spixi://app/com.mostnonameuser.spixi.aiassistant",
       "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.mostnonameuser.spixi.aiassistant",
       "singleUser": true,
-      "multiUser": false
+      "multiUser": false,
+      "featured": true
     }
   ],
   "categories": [
