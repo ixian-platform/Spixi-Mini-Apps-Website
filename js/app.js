@@ -30,6 +30,7 @@ async function fetchApps() {
     apps = data.apps;
     categories = data.categories;
     renderApps();
+    renderFeaturedApps();
     updateLoadMoreVisibility();
   } catch (error) {
     console.error('Error loading apps:', error);
@@ -88,6 +89,25 @@ function renderApps() {
 }
 
 /**
+ * Render featured apps carousel
+ */
+function renderFeaturedApps() {
+  const featuredContainer = document.querySelector('.featured__carousel');
+  if (!featuredContainer) return;
+
+  const featuredApps = getFeaturedApps();
+
+  if (featuredApps.length === 0) {
+    // Hide featured section if no apps
+    const featuredSection = document.querySelector('.featured');
+    if (featuredSection) featuredSection.style.display = 'none';
+    return;
+  }
+
+  featuredContainer.innerHTML = featuredApps.map(app => createAppCard(app)).join('');
+}
+
+/**
  * Create HTML for a single app card
  * @param {Object} app - App data object
  * @returns {string} - HTML string
@@ -112,7 +132,7 @@ function createAppCard(app) {
   let userCapabilityIcons = '';
   if (app.singleUser || app.multiUser) {
     userCapabilityIcons = '<div class="app-card__user-capabilities">';
-    
+
     if (app.singleUser) {
       userCapabilityIcons += `
         <div class="app-card__user-icon" title="Single User">
@@ -121,7 +141,7 @@ function createAppCard(app) {
           </svg>
         </div>`;
     }
-    
+
     if (app.multiUser) {
       userCapabilityIcons += `
         <div class="app-card__user-icon" title="Multi User">
@@ -130,7 +150,7 @@ function createAppCard(app) {
           </svg>
         </div>`;
     }
-    
+
     userCapabilityIcons += '</div>';
   }
 
