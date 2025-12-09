@@ -131,6 +131,9 @@ function renderFeaturedApps() {
  * Create HTML for a single app card
  * @param {Object} app - App data object
  * @returns {string} - HTML string
+ * 
+ * ! IMPORTANT: This logic is duplicated in scripts/update_apps.js for SSG.
+ * ! Any changes here MUST be mirrored in the build script.
  */
 function createAppCard(app) {
   const githubLink = app.github

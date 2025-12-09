@@ -8,6 +8,21 @@ const GITHUB_BRANCH = 'master';
 const APPS_PATH = 'apps';
 const APPS_JSON_PATH = path.join(__dirname, '../data/apps.json');
 
+// Helper to check if URL exists (HEAD request)
+function checkUrlExists(url) {
+  return new Promise((resolve, reject) => {
+    const req = https.request(url, { method: 'HEAD', headers: { 'User-Agent': 'Node.js' } }, (res) => {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        resolve(true);
+      } else {
+        reject(new Error(`Status ${res.statusCode}`));
+      }
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
 // Helper to fetch JSON from URL
 function fetchJson(url) {
   return new Promise((resolve, reject) => {
@@ -39,26 +54,10 @@ function fetchText(url) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(data);
         } else {
-          // Try to handle 404 gracefully if needed, but for appinfo it should exist
           reject(new Error(`Request failed with status ${res.statusCode}: ${url}`));
         }
       });
     }).on('error', reject);
-  });
-}
-
-// Helper to check if URL exists (HEAD request)
-function checkUrlExists(url) {
-  return new Promise((resolve, reject) => {
-    const req = https.request(url, { method: 'HEAD', headers: { 'User-Agent': 'Node.js' } }, (res) => {
-      if (res.statusCode >= 200 && res.statusCode < 300) {
-        resolve(true);
-      } else {
-        reject(new Error(`Status ${res.statusCode}`));
-      }
-    });
-    req.on('error', reject);
-    req.end();
   });
 }
 
@@ -77,10 +76,70 @@ function parseSpixiFile(content) {
   return data;
 }
 
+// Validate App Data
+function validateApp(app) {
+  const errors = [];
+  if (!app.id) errors.push('Missing ID');
+  if (!app.name) errors.push('Missing Name');
+  // if (!app.icon) errors.push('Missing Icon'); // Icon fallback handles this
+  return errors;
+}
+
+// Parse .spixi key-value format
+// ----------------------------------------------------------------------------
+// Main Update Function
+// ----------------------------------------------------------------------------
+
 async function updateApps() {
   console.log('Starting apps update...');
 
-  // 1. Read existing apps.json to preserve descriptions/categories if needed
+  try {
+    // 1. Load existing data
+    const { existingApps, existingCategories } = loadExistingData();
+
+    // 2. Fetch app list from GitHub
+    const appDirs = await fetchAppList();
+    console.log(`Found ${appDirs.length} apps to process.`);
+
+    // 3. Process each app
+    const newAppsList = [];
+    for (const dir of appDirs) {
+      const appId = dir.name;
+      const appData = await processApp(appId, existingApps);
+
+      if (appData) {
+        // 4. Validate App
+        const validationErrors = validateApp(appData);
+        if (validationErrors.length > 0) {
+          console.warn(`Skipping invalid app ${appId}: ${validationErrors.join(', ')}`);
+          continue;
+        }
+        newAppsList.push(appData);
+      }
+    }
+
+    // 5. Save apps.json
+    const output = {
+      apps: newAppsList,
+      categories: existingCategories
+    };
+    fs.writeFileSync(APPS_JSON_PATH, JSON.stringify(output, null, 2));
+    console.log(`Successfully updated apps.json with ${newAppsList.length} apps.`);
+
+    // 6. SSG Injection
+    injectIntoIndexHtml(output);
+
+  } catch (err) {
+    console.error('Fatal error updating apps:', err);
+    process.exit(1);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Application Processing Logic
+// ----------------------------------------------------------------------------
+
+function loadExistingData() {
   let existingApps = {};
   let existingCategories = ["All", "AI", "Games", "IoT", "Tools", "Dev Tools"];
   if (fs.existsSync(APPS_JSON_PATH)) {
@@ -96,89 +155,61 @@ async function updateApps() {
       console.warn('Could not read existing apps.json:', e.message);
     }
   }
+  return { existingApps, existingCategories };
+}
 
-  // 2. Fetch list of apps from GitHub contents API
-  // https://api.github.com/repos/ixian-platform/Spixi-Mini-Apps/contents/apps
+async function fetchAppList() {
   const contentsUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${APPS_PATH}`;
   console.log(`Fetching app list from ${contentsUrl}...`);
+  const contents = await fetchJson(contentsUrl);
+  return contents.filter(item => item.type === 'dir');
+}
+
+async function processApp(appId, existingApps) {
+  console.log(`Processing ${appId}...`);
+  const appInfoUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${APPS_PATH}/${appId}/appinfo.spixi`;
 
   try {
-    const contents = await fetchJson(contentsUrl);
-    const appDirs = contents.filter(item => item.type === 'dir');
+    const spixiContent = await fetchText(appInfoUrl);
+    const spixiData = parseSpixiFile(spixiContent);
 
-    const newAppsList = [];
+    // Meta from .spixi
+    const name = spixiData.name || appId;
+    const publisher = spixiData.publisher || 'Unknown';
+    const version = spixiData.version || '0.0.0';
+    const description = spixiData.description;
 
-    for (const dir of appDirs) {
-      const appId = dir.name;
-      console.log(`Processing ${appId}...`);
+    // Fallback to existing data
+    const existing = existingApps[appId] || {};
+    const finalDescription = description || existing.description || 'No description available.';
+    const finalCategory = existing.category || 'Tools';
 
-      // 3. Fetch appinfo.spixi
-      const appInfoUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${APPS_PATH}/${appId}/appinfo.spixi`;
-
-      try {
-        const spixiContent = await fetchText(appInfoUrl);
-        const spixiData = parseSpixiFile(spixiContent);
-
-        // Meta from .spixi
-        const name = spixiData.name || appId;
-        const publisher = spixiData.publisher || 'Unknown';
-        const version = spixiData.version || '0.0.0';
-        const description = spixiData.description; // Might be undefined
-
-        // Fallback to existing data for description and category
-        const existing = existingApps[appId] || {};
-        const finalDescription = description || existing.description || 'No description available.';
-        const finalCategory = existing.category || 'Tools'; // Default to Tools
-
-        // Validate icon URL
-        const iconUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${APPS_PATH}/${appId}/icon.png`;
-        let validIcon = iconUrl;
-        try {
-          // Check if icon exists (HEAD request)
-          await checkUrlExists(iconUrl);
-        } catch (e) {
-          console.warn(`Icon missing for ${appId}, using placeholder.`);
-          validIcon = 'assets/images/placeholder-app.png';
-        }
-
-        // Construct app object
-        const appObject = {
-          id: appId,
-          name: name,
-          publisher: publisher,
-          description: finalDescription,
-          category: finalCategory,
-          featured: existing.featured || false, // Preserve featured status
-          version: version,
-          icon: validIcon,
-          spixiUrl: `spixi://app/${appId}`,
-          github: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/tree/${GITHUB_BRANCH}/${APPS_PATH}/${appId}`
-        };
-
-        newAppsList.push(appObject);
-
-      } catch (err) {
-        console.error(`Failed to process ${appId}:`, err.message);
-        // If we fail to fetch remote info, maybe keep the existing one if it exists? 
-        // For now, let's skip it to ensure clean data from source-of-truth.
-      }
+    // Icon handling
+    const iconUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${APPS_PATH}/${appId}/icon.png`;
+    let validIcon = iconUrl;
+    try {
+      await checkUrlExists(iconUrl);
+    } catch (e) {
+      console.warn(`Icon missing for ${appId}, using placeholder.`);
+      validIcon = 'assets/images/placeholder-app.png';
     }
 
-    // 4. Save to apps.json
-    const output = {
-      apps: newAppsList,
-      categories: existingCategories
+    return {
+      id: appId,
+      name: name,
+      publisher: publisher,
+      description: finalDescription,
+      category: finalCategory,
+      featured: existing.featured || false,
+      version: version,
+      icon: validIcon,
+      spixiUrl: `spixi://app/${appId}`,
+      github: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/tree/${GITHUB_BRANCH}/${APPS_PATH}/${appId}`
     };
 
-    fs.writeFileSync(APPS_JSON_PATH, JSON.stringify(output, null, 2));
-    console.log(`Successfully updated apps.json with ${newAppsList.length} apps.`);
-
-    // 5. Inject into index.html (SSG)
-    injectIntoIndexHtml(output);
-
   } catch (err) {
-    console.error('Fatal error updating apps:', err);
-    process.exit(1);
+    console.error(`Failed to process ${appId}:`, err.message);
+    return null;
   }
 }
 
@@ -222,6 +253,8 @@ function injectIntoIndexHtml(data) {
 }
 
 // Server-side version of createAppCard (must match app.js structure)
+// ! IMPORTANT: This logic is duplicated in js/app.js.
+// ! Any changes here MUST be mirrored in the frontend code.
 function createAppCardHtml(app) {
   const githubLink = app.github
     ? `<a href="${app.github}" class="app-card__github" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
