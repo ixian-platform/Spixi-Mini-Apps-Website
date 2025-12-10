@@ -25,8 +25,8 @@
       "icon": "https://apps.spixi.io/apps/com.ixilabs.spixi.gate-control.png",
       "spixiUrl": "https://apps.spixi.io/apps/com.ixilabs.spixi.gate-control.spixi",
       "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.gate-control",
-      "singleUser": true,
-      "multiUser": false
+      "singleUser": false,
+      "multiUser": true
     },
     {
       "id": "com.ixilabs.spixi.mini-apps-test",
@@ -39,7 +39,7 @@
       "icon": "https://apps.spixi.io/apps/com.ixilabs.spixi.mini-apps-test.png",
       "spixiUrl": "https://apps.spixi.io/apps/com.ixilabs.spixi.mini-apps-test.spixi",
       "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.mini-apps-test",
-      "singleUser": true,
+      "singleUser": false,
       "multiUser": true
     },
     {
@@ -68,7 +68,7 @@
       "spixiUrl": "https://apps.spixi.io/apps/com.ixilabs.spixi.video-test.spixi",
       "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.video-test",
       "singleUser": true,
-      "multiUser": true
+      "multiUser": false
     },
     {
       "id": "com.ixilabs.spixi.whiteboard",
@@ -81,7 +81,7 @@
       "icon": "https://apps.spixi.io/apps/com.ixilabs.spixi.whiteboard.png",
       "spixiUrl": "https://apps.spixi.io/apps/com.ixilabs.spixi.whiteboard.spixi",
       "github": "https://github.com/ixian-platform/Spixi-Mini-Apps/tree/master/apps/com.ixilabs.spixi.whiteboard",
-      "singleUser": true,
+      "singleUser": false,
       "multiUser": true
     }
   ],
