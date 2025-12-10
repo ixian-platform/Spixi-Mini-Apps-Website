@@ -376,7 +376,7 @@
     </style>
 </head>
 <body>
-    <h1 style="text-align:center">Spixi MiniApp Packer v1.4</h1>
+    <h1 style="text-align:center">Spixi MiniApp Packer v1.5</h1>
     <div class="dropzone" id="dropzone">Drop your app folder here</div>
 
     <div id="appPreview" style="display:none; justify-content:center; align-items:center; margin-bottom:1em; gap:1em;">
@@ -574,17 +574,18 @@
                 }
             }
             const form = document.getElementById('spixiForm');
+            form.reset();
             for (const key in spixi) {
                 if (form.elements[key]) {
                     form.elements[key].value = spixi[key];
                 }
             }
 
-            // Auto-fill image and contentUrl based on 'name'
-            const appName = spixi.name?.trim().replace(/\s+/g, '-').toLowerCase();
-            if (appName) {
-                form.elements['image'].value = `${appName}.png`;
-                form.elements['contentUrl'].value = `${appName}.zspixiapp`;
+            // Auto-fill image and contentUrl based on 'id'
+            const baseName = spixi.id?.trim().replace(/\s+/g, '-').toLowerCase();
+            if (baseName) {
+                form.elements['image'].value = `${baseName}.png`;
+                form.elements['contentUrl'].value = `${baseName}.zspixiapp`;
             }
 
             // Show preview
