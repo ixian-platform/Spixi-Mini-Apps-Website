@@ -9,5 +9,5 @@ minUsers =
 maxUsers = 2
 protocols = com.ixilabs.gatecontrol
 contentUrl = com.ixilabs.spixi.gate-control.zspixiapp
-checksum = 2d952983924feec57a708244610b8490ed5d037049cd9e3b9d5f30255e9027c8
-contentSize = 378855
+checksum = 612b0dc3719f7dcdd3f4a7c22b238c78854dd7f0b8d0e6b392991c702bbc6c6b
+contentSize = 380557

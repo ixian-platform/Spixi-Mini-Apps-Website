@@ -9,5 +9,5 @@ minUsers =
 maxUsers = 
 protocols = 
 contentUrl = com.ixilabs.spixi.auth.zspixiapp
-checksum = 151be05aa93725f857bb971ba421d7f99aadd88cfd8506ab22b459447187e5f5
-contentSize = 1141176
+checksum = f097ebe51b26f57f457e91ad6e81f309cdea9bf2d35010af33c019a92ff598b3
+contentSize = 1142863

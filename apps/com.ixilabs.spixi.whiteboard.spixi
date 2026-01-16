@@ -9,5 +9,5 @@ minUsers =
 maxUsers = 3
 protocols = 
 contentUrl = com.ixilabs.spixi.whiteboard.zspixiapp
-checksum = 9297957d8068f479d8f4987546d1757aae6a767a436103526f846b40d6ccaa47
-contentSize = 523662
+checksum = 99de078cfc71519af35159f64bdd3b4b01e9c3e04890c9d00b19b47d4b577e27
+contentSize = 525356
